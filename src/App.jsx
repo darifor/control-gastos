@@ -4,7 +4,7 @@ import { Dashboard } from './pages/Dashboard';
 import { TransactionHistory } from './pages/TransactionHistory';
 import { Reports } from './pages/Reports';
 import { AddTransaction } from './pages/AddTransaction';
-import { LayoutDashboard, Receipt, PieChart, PlusCircle, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Receipt, PieChart, PlusCircle, Menu, X, Sun, Moon } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Panel de Control', icon: LayoutDashboard },
@@ -12,6 +12,43 @@ const navItems = [
   { path: '/reports', label: 'Reportes', icon: PieChart },
   { path: '/add', label: 'Añadir', icon: PlusCircle },
 ];
+
+function useDarkMode() {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+
+  React.useEffect(() => {
+    const root = window.document.documentElement;
+    if (isDark) {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
+
+  return [isDark, setIsDark];
+}
+
+function ThemeToggle({ isDark, toggle, className = "" }) {
+  return (
+    <button
+      onClick={toggle}
+      className={`p-2 rounded-full bg-surface-dim text-on-surface hover:bg-outline-variant transition-colors flex items-center justify-center ${className}`}
+      aria-label="Alternar modo oscuro"
+      title="Alternar modo oscuro"
+    >
+      {isDark ? <Sun size={20} /> : <Moon size={20} />}
+    </button>
+  );
+}
 
 function Navigation({ onClose }) {
   const location = useLocation();
@@ -69,16 +106,20 @@ function BottomNav() {
 
 function AppLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isDark, setIsDark] = useDarkMode();
 
   return (
     <div className="flex min-h-screen bg-background">
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex w-64 bg-surface h-screen border-r border-outline-variant p-4 flex-col gap-2 shrink-0 sticky top-0">
+      <nav className="hidden md:flex w-64 bg-surface h-screen border-r border-outline-variant p-4 flex-col gap-2 shrink-0 sticky top-0 transition-colors duration-300">
         <Navigation onClose={() => {}} />
+        <div className="mt-auto pt-4 border-t border-outline-variant flex justify-center">
+          <ThemeToggle isDark={isDark} toggle={() => setIsDark(!isDark)} className="w-full max-w-[200px] flex gap-3 justify-center py-3 rounded-md" />
+        </div>
       </nav>
 
       {/* Mobile hamburger header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant flex items-center px-4 h-14">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant flex items-center px-4 h-14 transition-colors duration-300">
         <button
           onClick={() => setDrawerOpen(true)}
           className="p-2 rounded-md text-on-surface hover:bg-surface-dim transition-colors"
@@ -86,7 +127,8 @@ function AppLayout() {
         >
           <Menu size={24} />
         </button>
-        <span className="ml-3 text-[17px] font-bold text-primary">Salud Financiera</span>
+        <span className="ml-3 text-[17px] font-bold text-primary flex-1">Salud Financiera</span>
+        <ThemeToggle isDark={isDark} toggle={() => setIsDark(!isDark)} className="w-10 h-10" />
       </div>
 
       {/* Mobile Drawer Overlay */}

@@ -50,6 +50,50 @@
   --radius-xl: 1.5rem;
 }
 
+@layer base {
+  .dark {
+    --color-surface: #0f172a;
+    --color-surface-dim: #020617;
+    --color-surface-bright: #1e293b;
+    --color-surface-container-lowest: #020617;
+    --color-surface-container-low: #0f172a;
+    --color-surface-container: #1e293b;
+    --color-surface-container-high: #334155;
+    --color-surface-container-highest: #475569;
+    
+    --color-on-surface: #f8fafc;
+    --color-on-surface-variant: #cbd5e1;
+    --color-inverse-surface: #f1f5f9;
+    --color-inverse-on-surface: #0f172a;
+    --color-outline: #64748b;
+    --color-outline-variant: #334155;
+    
+    --color-primary: #ffffff;
+    --color-on-primary: #000000;
+    --color-primary-container: #334155;
+    --color-on-primary-container: #f8fafc;
+    --color-inverse-primary: #94a3b8;
+    
+    --color-secondary: #34d399;
+    --color-on-secondary: #022c22;
+    --color-secondary-container: #064e3b;
+    --color-on-secondary-container: #6ee7b7;
+    
+    --color-tertiary: #f8fafc;
+    --color-on-tertiary: #000000;
+    --color-tertiary-container: #7f1d1d;
+    --color-on-tertiary-container: #fecaca;
+    
+    --color-error: #fca5a5;
+    --color-on-error: #450a0a;
+    --color-error-container: #7f1d1d;
+    --color-on-error-container: #fee2e2;
+    
+    --color-background: #0f172a;
+    --color-on-background: #f8fafc;
+  }
+}
+
 body {
-  @apply bg-background text-on-background font-inter antialiased;
+  @apply bg-background text-on-background font-inter antialiased transition-colors duration-300;
 }
